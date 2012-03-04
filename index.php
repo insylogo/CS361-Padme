@@ -1,10 +1,10 @@
 <?php
-	include_once("Course.php");
-
-	$courses = array();
-	
-	$courses[0] = new Course("mth", 111, "Intro to Algebra", "A fun course", 4, FALSE);
-	
-	print $courses[0]->name;
- 
+include_once("header.php");
+if ($_GET["page"] == "home") {
+	include_once("home.php");
+} 
+else {
+	include_once("home.php");
+}
+include_once("footer.php");
 ?>
