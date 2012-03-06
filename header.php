@@ -8,7 +8,7 @@
 	<script type="text/javascript" src="js/jquery.weekcalendar.js"></script>
 <script type="text/javascript">
 $(function() {
- 
+ 	
 	$('#calendar').weekCalendar({
 		events:[{"id":10182,
 		  "start":"2012-03-05T12:15:00.000+10:00",
