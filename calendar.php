@@ -71,57 +71,61 @@ while($row = mysql_fetch_array($result))
   {
   $crn = $row['crn'];
   $year = $row['year'];
-  $starthour = $row['start_time'] % 100;
-  $startminute = $row['start_time'] / 100; 
-  $endhour = $row['end_time'] % 100;
-  $endminute = $row['end_time'] / 100;
+  $start = $date_parse($row['start_time']) ;
+  $end = $date_parse($row['end_time']);
+  
+  $starthour = $start['hour'];
+  $startminute = $start['minute']; 
+  $endhour = $end['hour'];
+  $endminute = $end['minute'];
   $subject = $row['subject'];
   $course = $row['course_num'];
   
   
-  if ($row['days'] == 'MW') {
-  	for ($i = 2; i < 30; $i += 2) {
+  if ($row['days'] === 'MW') {
+  	for ($i = 2; $i < 30; $i = $i + 2) {
   		if ($i % 7 + 1 >= 2 && $i % 7 + 1 < 5) {
-  			echo "{'id':$crn, 'start': new Date($year, april, ";
+  			echo "{'id':$crn, 'start': new Date($year, 4, ";
   			echo $i;
-  			echo ", $starthour, $startminute), 'end': new Date($year, April, $i, $endhour, $endminute),'title':'$subject $course'},";
+  			echo ", $starthour, $startminute), 'end': new Date($year, 4, $i, $endhour, $endminute),'title':'$subject $course'},\n";
   		}
   		
   	}
   } 
-  elseif ($rows['days'] == 'MWF') {
-  	for ($i = 2; i < 30; $i += 2) {
+  if ($row['days'] === 'MWF') {
+  	for ($i = 2; $i < 30; $i = $i + 2) {
   		if ($i % 7 + 1 >= 2) {
-  			echo "{'id':$crn, 'start': new Date($year, april, ";
+  			echo "{'id':$crn, 'start': new Date($year, 4, ";
   			echo $i;
-  			echo ", $starthour, $startminute), 'end': new Date($year, April, $i, $endhour, $endminute),'title':'$subject $course'},";
+  			echo ", $starthour, $startminute), 'end': new Date($year, 4, $i, $endhour, $endminute),'title':'$subject $course'},\n";
   		}
   		
   	}
   }
-  elseif ($rows['days'] == 'TR') {
-  	for ($i = 3; i < 30; $i += 2) {
+  if ($row['days'] === 'TR') {
+  	for ($i = 3; $i < 30; $i = $i + 2) {
   		if ($i % 7 + 1 >= 3 && $i % 7 + 1 < 6) {
-  			echo "{'id':$crn, 'start': new Date($year, april, ";
+  			echo "{'id':$crn, 'start': new Date($year, 4, ";
   			echo $i;
-  			echo ", $starthour, $startminute), 'end': new Date($year, April, $i, $endhour, $endminute),'title':'$subject $course'},";
+  			echo ", $starthour, $startminute), 'end': new Date($year, 4, $i, $endhour, $endminute),'title':'$subject $course'},\n";
   		}
   		
   	}
   
   }
+}
 ?>	
 		]
 	};
 
-<!--
+/*
    {"id":1, "start": new Date(year, month, day, 12), "end": new Date(year, month, day, 13, 35),"title":"Lunch with Mike"},
    {"id":2, "start": new Date(year, month, day, 14), "end": new Date(year, month, day, 14, 45),"title":"Dev Meeting"},
    {"id":3, "start": new Date(year, month, day + 1, 18), "end": new Date(year, month, day + 1, 18, 45),"title":"Hair cut"},
    {"id":4, "start": new Date(year, month, day - 1, 8), "end": new Date(year, month, day - 1, 9, 30),"title":"Team breakfast"},
    {"id":5, "start": new Date(year, month, day + 1, 14), "end": new Date(year, month, day + 1, 16),"title":"Product showcase"},
    {"id":5, "start": new Date(year, month, day + 1, 15), "end": new Date(year, month, day + 1, 17),"title":"Overlay event"}
-   -->
+   */
 	   
 	$(document).ready(function() {
 
@@ -140,28 +144,6 @@ while($row = mysql_fetch_array($result))
 					$event.find(".time").css({"backgroundColor": "#999", "border":"1px solid #888"});
 				}
 			},
-			eventNew : function(calEvent, $event) {
-				displayMessage("<strong>Added event</strong><br/>Start: " + calEvent.start + "<br/>End: " + calEvent.end);
-				alert("You've added a new event. You would capture this event, add the logic for creating a new event with your own fields, data and whatever backend persistence you require.");
-			},
-			eventDrop : function(calEvent, $event) {
-				displayMessage("<strong>Moved Event</strong><br/>Start: " + calEvent.start + "<br/>End: " + calEvent.end);
-			},
-			eventResize : function(calEvent, $event) {
-				displayMessage("<strong>Resized Event</strong><br/>Start: " + calEvent.start + "<br/>End: " + calEvent.end);
-			},
-			eventClick : function(calEvent, $event) {
-				displayMessage("<strong>Clicked Event</strong><br/>Start: " + calEvent.start + "<br/>End: " + calEvent.end);
-			},
-			eventMouseover : function(calEvent, $event) {
-				displayMessage("<strong>Mouseover Event</strong><br/>Start: " + calEvent.start + "<br/>End: " + calEvent.end);
-			},
-			eventMouseout : function(calEvent, $event) {
-				displayMessage("<strong>Mouseout Event</strong><br/>Start: " + calEvent.start + "<br/>End: " + calEvent.end);
-			},
-			noEvents : function() {
-				displayMessage("There are no events for this week");
-			},
 			data:eventData
 		});
 
@@ -176,8 +158,5 @@ while($row = mysql_fetch_array($result))
 </script>
 </head>
 <body>
-		
-	<div id='calendar'></div>
-	
-</body>
-</html>
+<div style="text-align: center;"><h1>Padme's Course Planner</h1></div>
+<div id='calendar'></div>
