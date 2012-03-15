@@ -71,10 +71,10 @@ while($row = mysql_fetch_array($result))
   {
   $crn = $row['crn'];
   $year = $row['year'];
-  $start_hour = $row['start_time'] % 100;
-  $start_minute = $row['start_time'] / 100; 
-  $end_hour = $row['end_time'] % 100;
-  $end_minute = $row['end_time'] / 100;
+  $starthour = $row['start_time'] % 100;
+  $startminute = $row['start_time'] / 100; 
+  $endhour = $row['end_time'] % 100;
+  $endminute = $row['end_time'] / 100;
   $subject = $row['subject'];
   $course = $row['course_num'];
   
@@ -84,7 +84,7 @@ while($row = mysql_fetch_array($result))
   		if ($i % 7 + 1 >= 2 && $i % 7 + 1 < 5) {
   			echo "{'id':$crn, 'start': new Date($year, april, ";
   			echo $i;
-  			echo ", $start_hour, $start_minute), 'end': new Date($year, April, $i, $end_hour, $end_minute),'title':'$subject $course'},";
+  			echo ", $starthour, $startminute), 'end': new Date($year, April, $i, $endhour, $endminute),'title':'$subject $course'},";
   		}
   		
   	}
@@ -94,7 +94,7 @@ while($row = mysql_fetch_array($result))
   		if ($i % 7 + 1 >= 2) {
   			echo "{'id':$crn, 'start': new Date($year, april, ";
   			echo $i;
-  			echo ", $start_hour, $start_minute), 'end': new Date($year, April, $i, $end_hour, $end_minute),'title':'$subject $course'},";
+  			echo ", $starthour, $startminute), 'end': new Date($year, April, $i, $endhour, $endminute),'title':'$subject $course'},";
   		}
   		
   	}
@@ -104,7 +104,7 @@ while($row = mysql_fetch_array($result))
   		if ($i % 7 + 1 >= 3 && $i % 7 + 1 < 6) {
   			echo "{'id':$crn, 'start': new Date($year, april, ";
   			echo $i;
-  			echo ", $start_hour, $start_minute), 'end': new Date($year, April, $i, $end_hour, $end_minute),'title':'$subject $course'},";
+  			echo ", $starthour, $startminute), 'end': new Date($year, April, $i, $endhour, $endminute),'title':'$subject $course'},";
   		}
   		
   	}
