@@ -1,6 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
-<head>
 <style type='text/css'>
 
 	body {
@@ -62,21 +59,74 @@
 
 	var eventData = {
 		events : [
-		   {"id":1, "start": new Date(year, month, day, 12), "end": new Date(year, month, day, 13, 35),"title":"Lunch with Mike"},
-		   {"id":2, "start": new Date(year, month, day, 14), "end": new Date(year, month, day, 14, 45),"title":"Dev Meeting"},
-		   {"id":3, "start": new Date(year, month, day + 1, 18), "end": new Date(year, month, day + 1, 18, 45),"title":"Hair cut"},
-		   {"id":4, "start": new Date(year, month, day - 1, 8), "end": new Date(year, month, day - 1, 9, 30),"title":"Team breakfast"},
-		   {"id":5, "start": new Date(year, month, day + 1, 14), "end": new Date(year, month, day + 1, 16),"title":"Product showcase"},
-		   {"id":5, "start": new Date(year, month, day + 1, 15), "end": new Date(year, month, day + 1, 17),"title":"Overlay event"}
+<?php
+mysql_select_db("Oregon_State", $con);
+
+$result = mysql_query("SELECT *
+FROM class_information
+WHERE (`class_information`.`year` =2012) AND (`class_information`.`term`='Sprin')
+AND (`class_information`.`subject`='CS')");
+
+while($row = mysql_fetch_array($result))
+  {
+  $crn = $row['crn'];
+  $year = $row['year'];
+  $start_hour = $row['start_time'] % 100;
+  $start_minute = $row['start_time'] / 100; 
+  $end_hour = $row['end_time'] % 100;
+  $end_minute = $row['end_time'] / 100;
+  $subject = $row['subject'];
+  $course = $row['course_num'];
+  
+  
+  if ($row['days'] == 'MW') {
+  	for ($i = 2; i < 30; $i += 2) {
+  		if ($i % 7 + 1 >= 2 && $i % 7 + 1 < 5) {
+  			echo "{'id':$crn, 'start': new Date($year, april, ";
+  			echo $i;
+  			echo ", $start_hour, $start_minute), 'end': new Date($year, April, $i, $end_hour, $end_minute),'title':'Lunch with Mike'},";
+  		}
+  		
+  	}
+  }
+  elseif ($rows['days'] == 'MWF') {
+  	for ($i = 2; i < 30; $i += 2) {
+  		if ($i % 7 + 1 >= 2) {
+  			echo "{'id':$crn, 'start': new Date($year, april, ";
+  			echo $i;
+  			echo ", $start_hour, $start_minute), 'end': new Date($year, April, $i, $end_hour, $end_minute),'title':'Lunch with Mike'},";
+  		}
+  		
+  	}
+  }
+  elseif ($rows['days'] == 'TR') {
+  	for ($i = 3; i < 30; $i += 2) {
+  		if ($i % 7 + 1 >= 3 && $i % 7 + 1 < 6) {
+  			echo "{'id':$crn, 'start': new Date($year, april, ";
+  			echo $i;
+  			echo ", $start_hour, $start_minute), 'end': new Date($year, April, $i, $end_hour, $end_minute),'title':'Lunch with Mike'},";
+  		}
+  		
+  	}
+  
+  }
+?>	
 		]
 	};
 
-
+<!--
+   {"id":1, "start": new Date(year, month, day, 12), "end": new Date(year, month, day, 13, 35),"title":"Lunch with Mike"},
+   {"id":2, "start": new Date(year, month, day, 14), "end": new Date(year, month, day, 14, 45),"title":"Dev Meeting"},
+   {"id":3, "start": new Date(year, month, day + 1, 18), "end": new Date(year, month, day + 1, 18, 45),"title":"Hair cut"},
+   {"id":4, "start": new Date(year, month, day - 1, 8), "end": new Date(year, month, day - 1, 9, 30),"title":"Team breakfast"},
+   {"id":5, "start": new Date(year, month, day + 1, 14), "end": new Date(year, month, day + 1, 16),"title":"Product showcase"},
+   {"id":5, "start": new Date(year, month, day + 1, 15), "end": new Date(year, month, day + 1, 17),"title":"Overlay event"}
+   -->
 	   
 	$(document).ready(function() {
 
 		$('#calendar').weekCalendar({
-			timeslotsPerHour: 4,
+			timeslotsPerHour: 6,
 			allowCalEventOverlap: true,
 			overlapEventsSeparate: true,
 			totalEventsWidthPercentInOneColumn : 95,

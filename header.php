@@ -9,18 +9,7 @@
 <script type="text/javascript">
 $(function() {
  	
-	$('#calendar').weekCalendar({
-		events:[{"id":10182,
-		  "start":"2012-03-05T12:15:00.000+10:00",
-		  "end":"2012-03-05T13:15:00.000+10:00",
-		  "title":"Lunch with Mike"
-		}, {
-		  "id":10183,
-		  "start":"2012-03-05T14:00:00.000+10:00",
-		  "end":"2012-03-08T15:00:00.000+10:00",
-		  "title":"Dev Meeting"
-		    }]
-		});
+
 	  
 });
 	</script>
