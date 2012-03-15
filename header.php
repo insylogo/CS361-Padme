@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 'On');
+
 $con = mysql_connect("oniddb.cws.oregonstate.edu","gibsonro-db","NrczbYVcRkZD0vVV");
 if (!$con)
   {
