@@ -60,20 +60,41 @@
 	var eventData = {
 		events : [
 <?php
+
+if (isset($_GET['subject'])) {
+	$subj = $_GET['subject'];
+}
+else {
+	$subj = 'CS';
+}
+
 mysql_select_db("gibsonro-db", $con);
 
 $result = mysql_query("SELECT *
 FROM class_information
 WHERE (`class_information`.`year` =2012) AND (`class_information`.`term`='Sprin')
-AND (`class_information`.`subject`='CS')");
+AND (`class_information`.`subject`='$subj')");
+
+$earliest = 0;
+$latest = 0;
+
+
 
 while($row = mysql_fetch_array($result))
   {
   $crn = $row['crn'];
   $year = $row['year'];
-  $start = $date_parse($row['start_time']) ;
-  $end = $date_parse($row['end_time']);
+  $start = date_parse($row['start_time']) ;
+  $end = date_parse($row['end_time']);
+  if ($earliest == 0 || $start['hour'] < $earliest['hour']) {
+  	$earliest = $start;	
   
+  }
+  
+  if ($end['hour'] > $latest['hour']) {
+  	$latest = $end;
+  	
+  }
   $starthour = $start['hour'];
   $startminute = $start['minute']; 
   $endhour = $end['hour'];
@@ -81,37 +102,42 @@ while($row = mysql_fetch_array($result))
   $subject = $row['subject'];
   $course = $row['course_num'];
   
-  
-  if ($row['days'] === 'MW') {
-  	for ($i = 2; $i < 30; $i = $i + 2) {
-  		if ($i % 7 + 1 >= 2 && $i % 7 + 1 < 5) {
-  			echo "{'id':$crn, 'start': new Date($year, 4, ";
-  			echo $i;
-  			echo ", $starthour, $startminute), 'end': new Date($year, 4, $i, $endhour, $endminute),'title':'$subject $course'},\n";
+  if ($starthour != null) {
+	  if ($row['days'] === 'MW') {
+	  	for ($i = 2; $i < 30; $i = $i + ($i % 7 < 2?1:2)) {
+	  		if ($i % 7 >= 2 && $i % 7 < 6) {
+	  			$crn++;
+	  			echo "{'id':$crn, 'start': new Date($year, 3, ";
+	  			echo $i;
+	  			echo ", $starthour, $startminute), 'end': new Date($year, 3, $i, $endhour, $endminute),'title':'$subject $course'},\n";
+	  		}
+	  		
+	  	}
+	  } 
+	  if ($row['days'] === 'MWF') {
+	  	for ($i = 2; $i < 30; $i = $i + ($i % 7 < 2?1:2)) {
+	  		if ($i % 7 >= 2) {
+	  			$crn++;
+	  			echo "{'id':$crn, 'start': new Date($year, 3, ";
+	  			echo $i;
+	  			echo ", $starthour, $startminute), 'end': new Date($year, 3, $i, $endhour, $endminute),'title':'$subject $course'},\n";
+	  		}
+	  		
+	  	}
+	  }
+	  if ($row['days'] === 'TR') {
+	  	for ($i = 3; $i < 30; $i = $i + ($i % 7 < 2?3:2)) {
+	  		if ($i % 7 >= 2 && $i % 7 <= 5) {
+	  			$crn++;
+	  			echo "{'id':$crn, 'start': new Date($year, 3, ";
+	  			echo $i;
+	  			echo ", $starthour, $startminute), 'end': new Date($year, 3, $i, $endhour, $endminute),'title':'$subject $course'},\n";
+	  		}
+	  		
   		}
-  		
+	  		
   	}
-  } 
-  if ($row['days'] === 'MWF') {
-  	for ($i = 2; $i < 30; $i = $i + 2) {
-  		if ($i % 7 + 1 >= 2) {
-  			echo "{'id':$crn, 'start': new Date($year, 4, ";
-  			echo $i;
-  			echo ", $starthour, $startminute), 'end': new Date($year, 4, $i, $endhour, $endminute),'title':'$subject $course'},\n";
-  		}
-  		
-  	}
-  }
-  if ($row['days'] === 'TR') {
-  	for ($i = 3; $i < 30; $i = $i + 2) {
-  		if ($i % 7 + 1 >= 3 && $i % 7 + 1 < 6) {
-  			echo "{'id':$crn, 'start': new Date($year, 4, ";
-  			echo $i;
-  			echo ", $starthour, $startminute), 'end': new Date($year, 4, $i, $endhour, $endminute),'title':'$subject $course'},\n";
-  		}
-  		
-  	}
-  
+	 
   }
 }
 ?>	
@@ -134,9 +160,18 @@ while($row = mysql_fetch_array($result))
 			allowCalEventOverlap: true,
 			overlapEventsSeparate: true,
 			totalEventsWidthPercentInOneColumn : 95,
+			firstDayOfWeek : 1,
+      		businessHours :{start: <?php if (isset($earliest)) {
+	echo $earliest['hour'];	
 
+}
+else {
+echo 6;
+} ?>, end: <?php echo $latest['hour']; ?>, limitDisplay: true },
+      		daysToShow : 5,
+			
 			height: function($calendar){
-				return $(window).height() - $("h1").outerHeight(true);
+				return $(window).height() - $("h1").outerHeight(true) - 40;
 			},
 			eventRender : function(calEvent, $event) {
 				if(calEvent.end.getTime() < new Date().getTime()) {
@@ -146,7 +181,7 @@ while($row = mysql_fetch_array($result))
 			},
 			data:eventData
 		});
-
+		$("#calendar").weekCalendar("gotoWeek", new Date("4/2/2012"));
 		function displayMessage(message) {
 			$("#message").html(message).fadeIn();
 		}
@@ -158,5 +193,5 @@ while($row = mysql_fetch_array($result))
 </script>
 </head>
 <body>
-<div style="text-align: center;"><h1>Padme's Course Planner</h1></div>
+<div style="text-align: center; vertical-align: top"><h1>Padme's Course Planner</h1></div>
 <div id='calendar'></div>
