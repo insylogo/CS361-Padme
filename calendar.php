@@ -84,17 +84,17 @@ while($row = mysql_fetch_array($result))
   		if ($i % 7 + 1 >= 2 && $i % 7 + 1 < 5) {
   			echo "{'id':$crn, 'start': new Date($year, april, ";
   			echo $i;
-  			echo ", $start_hour, $start_minute), 'end': new Date($year, April, $i, $end_hour, $end_minute),'title':'Lunch with Mike'},";
+  			echo ", $start_hour, $start_minute), 'end': new Date($year, April, $i, $end_hour, $end_minute),'title':'$subject $course'},";
   		}
   		
   	}
-  }
+  } 
   elseif ($rows['days'] == 'MWF') {
   	for ($i = 2; i < 30; $i += 2) {
   		if ($i % 7 + 1 >= 2) {
   			echo "{'id':$crn, 'start': new Date($year, april, ";
   			echo $i;
-  			echo ", $start_hour, $start_minute), 'end': new Date($year, April, $i, $end_hour, $end_minute),'title':'Lunch with Mike'},";
+  			echo ", $start_hour, $start_minute), 'end': new Date($year, April, $i, $end_hour, $end_minute),'title':'$subject $course'},";
   		}
   		
   	}
@@ -104,7 +104,7 @@ while($row = mysql_fetch_array($result))
   		if ($i % 7 + 1 >= 3 && $i % 7 + 1 < 6) {
   			echo "{'id':$crn, 'start': new Date($year, april, ";
   			echo $i;
-  			echo ", $start_hour, $start_minute), 'end': new Date($year, April, $i, $end_hour, $end_minute),'title':'Lunch with Mike'},";
+  			echo ", $start_hour, $start_minute), 'end': new Date($year, April, $i, $end_hour, $end_minute),'title':'$subject $course'},";
   		}
   		
   	}
