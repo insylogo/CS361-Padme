@@ -75,9 +75,9 @@ FROM class_information
 WHERE (`class_information`.`year` =2012) AND (`class_information`.`term`='Sprin')
 AND (`class_information`.`subject`='$subj')");
 
-$earliest = 0;
-$latest = 0;
 
+$latest = 0;
+$earliest = 23;
 
 
 while($row = mysql_fetch_array($result))
@@ -86,11 +86,12 @@ while($row = mysql_fetch_array($result))
   $year = $row['year'];
   $start = date_parse($row['start_time']) ;
   $end = date_parse($row['end_time']);
-  if ($earliest == 0 || $start['hour'] < $earliest['hour']) {
-  	$earliest = $start;	
+  
+  if ($start['hour'] < $earliest) {
+  	$earliest = $start['hour'];	
   
   }
-  
+
   if ($end['hour'] > $latest['hour']) {
   	$latest = $end;
   	
@@ -157,21 +158,16 @@ while($row = mysql_fetch_array($result))
 
 		$('#calendar').weekCalendar({
 			timeslotsPerHour: 6,
-			allowCalEventOverlap: true,
-			overlapEventsSeparate: true,
+			allowCalEventOverlap: <?php echo (isset($_GET['showall'])?"true":"false"); ?>,
 			totalEventsWidthPercentInOneColumn : 95,
 			firstDayOfWeek : 1,
-      		businessHours :{start: <?php if (isset($earliest)) {
-	echo $earliest['hour'];	
-
-}
-else {
-echo 6;
-} ?>, end: <?php echo $latest['hour']; ?>, limitDisplay: true },
+      		businessHours :{start: 8, end: <?php echo $latest['hour'] + 1; ?>, limitDisplay: true },
       		daysToShow : 5,
+			readonly:true,
+			overlapEventsSeparate: true,
 			
 			height: function($calendar){
-				return $(window).height() - $("h1").outerHeight(true) - 40;
+				return $(window).height() - $("h1").outerHeight(true) - 1;
 			},
 			eventRender : function(calEvent, $event) {
 				if(calEvent.end.getTime() < new Date().getTime()) {
