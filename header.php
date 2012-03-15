@@ -1,5 +1,5 @@
 <?php
-$con = mysql_connect("http://www.unnebulous.com","public_guest","6CD4mrnWK66vnEh9");
+$con = mysql_connect("oniddb.cws.oregonstate.edu","gibsonro-db","NrczbYVcRkZD0vVV");
 if (!$con)
   {
   die('Could not connect: ' . mysql_error());

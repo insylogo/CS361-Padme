@@ -60,7 +60,7 @@
 	var eventData = {
 		events : [
 <?php
-mysql_select_db("Oregon_State", $con);
+mysql_select_db("gibsonro-db", $con);
 
 $result = mysql_query("SELECT *
 FROM class_information
